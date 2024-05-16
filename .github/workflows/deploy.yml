@@ -75,7 +75,7 @@ jobs:
                 }
               ]
             }
-          ]" | jq -r '.taskDefinition.taskDefinitionArn')
+          ]" --region $AWS_REGION | jq -r '.taskDefinition.taskDefinitionArn')
         
         echo "Updating ECS service"
         aws ecs update-service --cluster $CLUSTER_NAME --service $SERVICE_NAME --task-definition $NEW_TASK_DEFINITION
