@@ -44,6 +44,16 @@ resource "aws_iam_role" "ecs_task_execution_role" {
       "Sid": "GetAuthorizationToken",
       "Effect": "Allow",
       "Action": [
+        "ecr:GetAuthorizationToken"
+      ],
+      "Resource": "*"
+    }
+  ]
+    "Statement": [
+    {
+      "Sid": "GetAuthorizationToken",
+      "Effect": "Allow",
+      "Action": [
         "ecr-public:GetAuthorizationToken",
         "sts:GetServiceBearerToken"
       ],
