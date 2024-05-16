@@ -55,6 +55,20 @@ jobs:
       run: |
         echo "Updating task definition"
         TASK_DEFINITION_ARN=$(aws ecs describe-task-definition --task-definition $TASK_DEFINITION | jq -r '.taskDefinition.taskDefinitionArn')
+
+        CONTAINER_DEFINITION='[
+          {
+            "name": "$CONTAINER_NAME",
+            "image": "${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:${{ github.sha }}",
+            "essential": true,
+            "portMappings": [
+               {
+                 "containerPort": 3000,
+                 "hostPort": 3000
+               }
+            ]
+          }
+        ]'
         
         NEW_TASK_DEFINITION=$(aws ecs register-task-definition \
           --family $TASK_DEFINITION \
@@ -63,21 +77,8 @@ jobs:
           --cpu "256" \
           --memory "512" \
           --execution-role-arn $(aws iam get-role --role-name ecsTaskExecutionRole | jq -r '.Role.Arn') \
-          --container-definitions |
-           [
-            {
-              \"name\": \"$CONTAINER_NAME\",
-              \"image\": \"${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:${{ github.sha }}",
-              \"essential\": true,
-              \"portMappings\": [
-                {
-                  \"containerPort\": 3000,
-                  \"hostPort\": 3000
-                }
-              ]
-            }
-           ]
-         --region $AWS_REGION | jq -r '.taskDefinition.taskDefinitionArn')
+          --cli-input-json file://<(echo "{\"containerDefinitions\": $CONTAINER_DEFINITION}") \
+          --region $AWS_REGION | jq -r '.taskDefinition.taskDefinitionArn')
         
         echo "Updating ECS service"
         aws ecs update-service --cluster $CLUSTER_NAME --service $SERVICE_NAME --task-definition $NEW_TASK_DEFINITION
