@@ -63,7 +63,8 @@ jobs:
           --cpu "256" \
           --memory "512" \
           --execution-role-arn $(aws iam get-role --role-name ecsTaskExecutionRole | jq -r '.Role.Arn') \
-          --container-definitions "[
+          --container-definitions |
+           [
             {
               \"name\": \"$CONTAINER_NAME\",
               \"image\": \"${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:${{ github.sha }}",
@@ -75,7 +76,8 @@ jobs:
                 }
               ]
             }
-          ]" --region $AWS_REGION | jq -r '.taskDefinition.taskDefinitionArn')
+           ]
+         --region $AWS_REGION | jq -r '.taskDefinition.taskDefinitionArn')
         
         echo "Updating ECS service"
         aws ecs update-service --cluster $CLUSTER_NAME --service $SERVICE_NAME --task-definition $NEW_TASK_DEFINITION
