@@ -39,6 +39,17 @@ resource "aws_iam_role" "ecs_task_execution_role" {
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
+    "Statement": [
+    {
+      "Sid": "GetAuthorizationToken",
+      "Effect": "Allow",
+      "Action": [
+        "ecr-public:GetAuthorizationToken",
+        "sts:GetServiceBearerToken"
+      ],
+      "Resource": "*"
+    }
+  ]
     Statement = [
       {
         Effect = "Allow"
