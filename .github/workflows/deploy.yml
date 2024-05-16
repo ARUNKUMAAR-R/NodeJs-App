@@ -9,6 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_REGION: us-east-1
+      ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+      ECR_REPOSITORY: hello-world
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -16,15 +21,15 @@ jobs:
     - name: Log in to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+      with:
+        registry: ${{ env.ECR_REGISTRY }}
 
     - name: Build, tag, and push Docker image
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: hello-world
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
+        docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
     - name: Deploy to ECS
       env:
@@ -50,7 +55,7 @@ jobs:
           --container-definitions "[
             {
               \"name\": \"$CONTAINER_NAME\",
-              \"image\": \"${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG\",
+              \"image\": \"${{ env.ECR_REGISTRY }}/$ECR_REPOSITORY:$IMAGE_TAG\",
               \"essential\": true,
               \"portMappings\": [
                 {
@@ -63,4 +68,3 @@ jobs:
         
         echo "Updating ECS service"
         aws ecs update-service --cluster $CLUSTER_NAME --service $SERVICE_NAME --task-definition $NEW_TASK_DEFINITION
-
