@@ -32,10 +32,7 @@ jobs:
         mask-password: false
         registry-type: private
         skip-logout: false
-      env:
-        AWS_REGION: us-east-1
-        ECR_REGISTRY: ***.dkr.ecr.${AWS_REGION}.amazonaws.com
-        ECR_REPOSITORY: hello-world
+      
 
     - name: Build, tag, and push Docker image
       env:
