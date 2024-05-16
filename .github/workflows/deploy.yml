@@ -69,6 +69,8 @@ jobs:
             ]
           }
         ]'
+
+        echo "CONTAINER_DEFENITION" > container_definition.json
         
         NEW_TASK_DEFINITION=$(aws ecs register-task-definition \
           --family $TASK_DEFINITION \
@@ -77,7 +79,7 @@ jobs:
           --cpu "256" \
           --memory "512" \
           --execution-role-arn $(aws iam get-role --role-name ecsTaskExecutionRole | jq -r '.Role.Arn') \
-          --cli-input-json file://<(echo "{\"containerDefinitions\": $CONTAINER_DEFINITION}") \
+          --cli-input-json file://container_definition.json \
           --region $AWS_REGION | jq -r '.taskDefinition.taskDefinitionArn')
         
         echo "Updating ECS service"
