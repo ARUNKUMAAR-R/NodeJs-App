@@ -5,6 +5,9 @@
 
 resource "aws_vpc" "nodejs_vpc" {
   cidr_block = var.CIDR
+  tags = {
+    name = "vpc-nodejs"
+  }
 }
 
 resource "aws_subnet" "public_subnet1" {
@@ -17,10 +20,7 @@ resource "aws_internet_gateway" "nodejs_igw" {
   vpc_id = aws_vpc.nodejs_vpc.id
 }
 
-resource "aws_internet_gateway_attachment" "nodejs_igw_attach" {
-  vpc_id = aws_vpc.nodejs_vpc.id
-  internet_gateway_id = aws_internet_gateway.nodejs_igw.id 
-}
+
 
 resource "aws_route_table" "public_subnet1_rt" {
   vpc_id = aws_vpc.nodejs_vpc.id
