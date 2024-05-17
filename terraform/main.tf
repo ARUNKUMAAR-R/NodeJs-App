@@ -13,7 +13,7 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "subnet" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-west-2a"
+  availability_zone = "us-east-1a"
 }
 
 resource "aws_security_group" "sg" {
@@ -77,7 +77,7 @@ resource "aws_iam_role" "ecs_task_execution_role" {
 }
 
 resource "aws_ecs_task_definition" "hello_world" {
-  family                   = "hello-world-task"
+  family                   = "hello-world-family"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
@@ -87,7 +87,7 @@ resource "aws_ecs_task_definition" "hello_world" {
 
   container_definitions = jsonencode([{
     name = "hello-world"
-    image = "<AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/hello-world:latest"
+    image = "<AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/hello:latest"
     essential = true
     portMappings = [{
       containerPort = 3000
