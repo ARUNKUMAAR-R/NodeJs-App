@@ -42,7 +42,6 @@ jobs:
         context: ./app
         file: ./app/Dockerfile
         push: true
-        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/hello-world:${{ github.sha }}
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/hello-world:latest
         
     - name: Logout of Amazon ECR
