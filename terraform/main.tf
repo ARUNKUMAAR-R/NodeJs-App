@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "hello_world" {
   container_definitions = jsonencode([
     {
       name      = "hello-world"
-      image     = "111151604484.dkr.ecr.us-east-1.amazonaws.com/hello:latest"
+      image     = "111151604484.dkr.ecr.us-east-1.amazonaws.com/hello-world:latest"
       essential = true
       portMappings = [
         {
