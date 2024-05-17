@@ -5,5 +5,14 @@ variable "aws_account_id" {
 
 variable "aws_region" {
   description = "AWS Region"
-  type        = string
+  default = "us-east-1"
 }
+
+variable "CIDR" {
+  default = "15.0.0.0/16"
+}
+
+variable "CIDR-PUBLIC" {
+  default = "15.0.0.0/16"
+}
+
