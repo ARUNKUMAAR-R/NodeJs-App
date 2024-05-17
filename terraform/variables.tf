@@ -1,7 +1,7 @@
-variable "aws_account_id" {
-  description = "AWS Account ID"
-  type        = string
-}
+## Author : ARUNKUMAAR R
+## Description : Variables for configuring AWS VPC
+## Date : 17/05/24
+
 
 variable "aws_region" {
   description = "AWS Region"
@@ -9,10 +9,10 @@ variable "aws_region" {
 }
 
 variable "CIDR" {
-  default = "15.0.0.0/16"
+  default = "10.0.0.0/16"
 }
 
 variable "CIDR-PUBLIC" {
-  default = "15.0.0.0/16"
+  default = "10.0.1.0/24"
 }
 
