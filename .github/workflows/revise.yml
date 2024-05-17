@@ -18,6 +18,9 @@ jobs:
         with:
           terraform_version: 1.0.11  # Specify your Terraform version here
 
+      - name: Navigate to Terraform directory
+        run: cd terraform
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
