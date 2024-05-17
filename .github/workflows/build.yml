@@ -12,6 +12,7 @@ jobs:
     env:
       AWS_REGION: us-east-1
       ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${AWS_REGION}.amazonaws.com
+      REPO: hello-world
       DOCKER_REPO: hello-world
       
 
@@ -50,7 +51,7 @@ jobs:
       with:
         file: ./app/Dockerfile
         push: true
-        tags: ${{ env.ECR_REGISTRY }}/${{ env.DOCKER_REPO }}:${{ github.sha }}
+        tags: ${{ env.ECR_REGISTRY }}/${{ env.REPO }}:${{ github.sha }}
 
     - name: Logout of Amazon ECR
       run: docker logout ${{ env.ECR_REGISTRY }}
