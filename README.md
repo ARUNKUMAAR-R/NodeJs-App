@@ -21,4 +21,4 @@ Workflow
    - Builds the Docker image
    - Pushes the Docker image to Amazon ECR
    - Provision AWS ECS and Deploys the new image to ECS
-   
+This is a just a new update in readme file.   
