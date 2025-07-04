@@ -64,5 +64,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'world'
-          slot-name: 'world/development' 
+          slot-name: 'development' 
           package: ./app
